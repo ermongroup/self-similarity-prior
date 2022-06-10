@@ -1,0 +1,8 @@
+numpy
+jax
+torch
+ml_collections
+wandb
+optax 
+flax
+matplotlib
