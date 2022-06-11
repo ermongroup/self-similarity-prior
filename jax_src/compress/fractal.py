@@ -35,7 +35,6 @@ def generate_candidates(chunks, identifiers, use_rotation=True, use_flips=False)
     identifiers = jnp.concatenate([identifiers, flip_bit, rotate], 1)
 
     # try all rotations of the block
-    # TODO: assert chunks are square before rotating
     if use_rotation:
         chunks_ = chunks
         for i in range(4):
@@ -193,9 +192,8 @@ def decode(img, configs, key=BASE_KEY):
         z0 = z0.at[H//2:].set(0)
 
     elif inverse_problem == "denoising":
-        #z0 = z0 + noise_schedule[0]
-        z0 = z0 + 10
-
+        z0 = z0 + noise_schedule[0]
+        
     elif inverse_problem == "mixup":
         z0 = configs['mixup_image']
 
@@ -237,7 +235,7 @@ def decode(img, configs, key=BASE_KEY):
             reconstructed_Rs = jnp.einsum('bk,bkij->bij', weights[...,0], reconstructed_Rs)
              
             # Unchunk the image from reconstructed_Rs
-            sol = faster_unpartition_img(reconstructed_Rs, R_h_chunks, R_w_chunks, R_identifiers)
+            sol = faster_unpartition_img(reconstructed_Rs, R_h_chunks, R_w_chunks)
             return sol
 
         sol = decode_step(cur)

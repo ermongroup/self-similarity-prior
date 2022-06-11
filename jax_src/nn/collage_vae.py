@@ -10,7 +10,7 @@ import flax.linen as nn
 from utils.vae_utils import * 
 from functools import partial
 from utils.plot_utils import *
-from jax_src.frax.modules import CollageDecoder, Encoder, Decoder, LatAuxVDCVAEDecode
+from jax_src.frax.modules import CollageDecoder, Encoder, Decoder, LatAuxVDCVAEDecoder
 
 
 class VDCVAE(nn.Module):
@@ -37,9 +37,7 @@ class VDCVAE(nn.Module):
     def __call__(self, x_in, x_out, rng, return_sample=True, superres_factor=1):
         ndims = np.prod(x_in.shape[1:])
 
-        # if self.config.likelihood_func == "dmol":
-        #     x_out = 2*x_out - 1 # rescale from [0, 1] to [-1, 1]
-        
+
         start_time = time()
         activations = self.encoder(x_in)
         ptheta_z, stats = self.decoder(activations, rng)
