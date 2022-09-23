@@ -10,6 +10,7 @@
 [![NeurIPS](https://img.shields.io/badge/NeurIPS-2022-red.svg?)]()
 [![License](https://img.shields.io/badge/License-MIT-black.svg?)]()
 [![arXiv](https://img.shields.io/badge/arXiv-2204.07673-purple.svg?)](https://arxiv.org/abs/2204.07673)
+[![Blog](https://img.shields.io/badge/Blog-blue.svg?)](https://zymrael.github.io/self-similarity-prior/)
 
 </div>
 
