@@ -16,9 +16,9 @@ from ml_collections.config_flags import config_flags
 from PIL import Image
 
 import wandb
-from src.data.datasets import get_dataset
-from src.frax.fractalvae import *
-from src.frax.modules import *
+from jax_src.data.datasets import get_dataset
+from jax_src.frax.fractalvae import *
+from jax_src.frax.modules import *
 from utils.plot_utils import *
 from utils.train_utils import *
 from utils.eval_utils import *
