@@ -197,14 +197,6 @@ class NeuralFractalSuperresAutoencoder(NeuralFractalAutoencoder):
         return reconstructions
 
 
-# .png
-# preprocessing -> 1, H, W, C
-# blockpreproc -> n_blocks, block_h, block_w, C <- (block_h, block_w) is different than (range_h, range_w)
-# NeuralFractalStyleAutoencoder(blocks)
-# if you want to decode/visualize, compress blocks in batch and then "unchunk"
-
-# image to stylize 1, H, W, C, [optional] source image for style 1, H, W, C, chunked image to stylize n_blocks, block_h, block_w, C
-#
 class NeuralFractalStyleAutoencoder(NeuralFractalAutoencoder):
     "Multiple source (soft) Neural Fractal Autoencoder model for stylization"
     config : dict

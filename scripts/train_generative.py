@@ -106,21 +106,6 @@ def train_epoch(epoch, config, state, optimizer, data, preprocess_fn, opt_state)
                         wandb.log({'mul histograms': mul_table}, step=step)
                         wandb.log({'add histograms': add_table}, step=step)
 
-                        # width = 0.15
-                        # y_pos = np.arange(16)
-                        # fig = plt.figure()
-                        # axs = fig.subplots(nrows=2, ncols=1)
-                        # for d in range(mul_.shape[1]):
-                        #     axs[0].bar(y_pos + d*width, mul_[:,d], width)
-                        #     axs[1].bar(y_pos + d*width, add_[:,d], width)
-                        # axs[0].set_title('Mul')
-                        # axs[1].set_title('Add')
-                        # wandb.log({'Histograms (Interactive)': plt})
-                        # wandb.log({'Histograms': wandb.Image(fig)}) # wandb automatically closes these plots
-                        
-
-                        # wandb.log({f'mul histograms ({c}/{COL})': wandb.plot.histogram(mul_table, columns[COL], title=f'mul parameter distribution: {c}'), f'add histograms ({c}/{COL})': wandb.plot.histogram(add_table, columns[COL], title=f'add parameter distribution: {c}')})
-
             if step == 0 or step % config.ckpt_steps == 0:
                 # Only `params` is replicated for distributed training
                 save_params = params

@@ -8,6 +8,7 @@ import flax.linen as nn
 import jax
 import jax.numpy as jnp
 import numpy as np
+from jax_src.nn.modules import ResidualBlock
 from utils.fractal_utils import augment_sample, generate_candidates
 from utils.transforms import (faster_unpartition_img, partition_img, reduce)
 from utils.vae_utils import *
@@ -240,9 +241,7 @@ class CollageDecoder(nn.Module):
             self.aux_sources = self.stylized_img_source
         
         self.theta_width = self.n_range_patches * 3 * self.n_domain_patches * self.n_param_copies
-        # OR
-        # self.theta_width = self.n_range_patches * 3 * self.n_aux_sources * self.n_param_copies
-        # (bs, rh, rw, n_range_patches * patch_emb_sz) --> (bs, rh, rw, theta_width)
+
 
         if self.config.depthwise_patch_to_theta:
             self.patch_to_theta =  nn.Conv(self.theta_width, 
@@ -259,11 +258,6 @@ class CollageDecoder(nn.Module):
         if self.n_aux_latents > 0:
             self.aux1x1 = get_1x1(self.config.collage_width * self.n_aux_latents)
 
-    # theta_width example: (32, 32) image (2, 2) patches, 256 (n_domain = 5, n_copies = 3), 256 * 3 * 5 (~~connections) * 3 = 11520
-    # typical "patch_emb" size: patch_emb_sz = 100 (2, 2) patches, 256 patches (n_range_patches), 256 * 100 = 25600
-    # self.patch_to_theta 1x1 conv 768 -> 11520
-    # (2, 2) patches (rh, rw) 1x1 conv 768 * 11520 = ~9mil   
-    #  self.rh * self.rw * 45 (# groups = theta_widths / n_patches) = 4 * 4 * 45 = ~ 600   
     
     def __call__(self, patch_emb, rng_key, bs=1, superres_factor=1, significant_digits=-1, aux_latents=None):
         """Decodes an image as the fixed-point of a collage with contration parameters `theta`.
@@ -296,7 +290,6 @@ class CollageDecoder(nn.Module):
             mul, add = jnp.round(mul, decimals=significant_digits), jnp.round(add, decimals=significant_digits)
 
         # initial condition for fp iteration
-        #iterate = jax.random.normal(key=rng_key, shape=(bs, h, w, c))
         iterate = jnp.zeros(shape=(bs, h, w, c))
 
         # prep the latent aux. patches
@@ -339,15 +332,10 @@ class CollageDecoder(nn.Module):
                 else:
                     aux_sources = jnp.broadcast_to(aux_source_pooled, (self.n_range_patches, self.n_aux_sources, self.rh, self.rw))
 
-                # if superres_factor > 1:
-                #     aux_sources = resize(aux_sources, (self.n_range_patches, self.n_aux_sources, rh, rw), 'nearest')
 
                 domain_p = jnp.broadcast_to(domain_p, (self.n_range_patches, domain_p.shape[0], rh, rw)) # (4, 1, 8, 8)
                 domain_p = jnp.concatenate([domain_p, aux_sources], axis=1) # (16, 4, 8, 8), (16, 1, 8, 8) | (4, 11, 8, 8)
 
-                # mul, add .... `rd` (num_range_patches, num_domain_patches) 
-                # num_domain_patches will have a mismatch if you throw away a bunch of domains
-                # mul, add = mul[:,:1]
 
                 reweight_parameters = reweight_d != 1. or reweight_a != 1.
                 if reweight_parameters:
@@ -383,7 +371,6 @@ class CollageDecoder(nn.Module):
                 aux_sources = jnp.broadcast_to(aux_sources, (self.n_range_patches, self.n_aux_sources, self.rh, self.rw))
                 aux_latents = jnp.broadcast_to(aux_latents, (self.n_range_patches, self.n_aux_latents, self.rh, self.rw))
 
-                # pool patches (pre augmentation) for compatibility with range partition shapes
                 if superres_factor > 1:
                     aux_sources = resize(aux_sources, (self.n_range_patches, self.n_aux_sources, rh, rw), 'nearest')
                     aux_latents = resize(aux_latents, (self.n_range_patches, self.n_aux_latents, rh, rw), 'nearest')

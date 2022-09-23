@@ -18,24 +18,23 @@ from jax_src.compress.fractal import fractal_compress
 config = ml_collections.ConfigDict()
 config.time_factor = 10
 
-
 FLAGS = flags.FLAGS
 config_flags.DEFINE_config_dict('cfg', config)
-flags.DEFINE_string("file", "snow232.png", "path to image file to plot")
-flags.DEFINE_string("outname", "output_compress", "output artifact name")
-flags.DEFINE_list("domain_patch_szs", [230,230], "")
+flags.DEFINE_string("file", "/media/michael_cat100.jpg", "path to image file to plot")
+flags.DEFINE_list("domain_patch_szs", [100,100], "")
 flags.DEFINE_list("range_patch_szs", [2,2], "")
 flags.DEFINE_integer("superres_factor", 1, "")
 
 def main(argv):
+    print(f'Running PIFS fractal compression on the target image.')
     jax.config.update('jax_platform_name', 'cpu')
-    fpath = f'data/{FLAGS.file}'
-    
-    img = Image.open(f'{fpath}')
+
+    img_path = os.getcwd() + f'{FLAGS.file}'
+    img = Image.open(f'{img_path}')
     img = jnp.asarray(img)[...,:3]
 
     h, w, c = img.shape
-    print(img.shape)
+    print(f'Input image shape: {img.shape}')
 
     key = jax.random.PRNGKey(0)
     r_h, r_w = FLAGS.range_patch_szs
@@ -45,13 +44,11 @@ def main(argv):
     R_chunks = (h // int(r_h), w // int(r_w))
 
     # TODO: standardize here for various image types (8bit, normalized)
-    if img.max() > 1: #
-        img = img / 255.
-
+    if img.max() > 1: img = img / 255.
     kwargs = {"n_iters": 10, 
             "init_partition": "tiling", 
             "cmap_class": "affine", 
-            "n_sources": 1, # n source patches you want for each target patch, 1 is 1:1
+            "n_sources": 1, # n source patches you want for each target patch, 1 is 1 source patch for each range
             "D_chunks": D_chunks, 
             "R_chunks": R_chunks, 
             "use_rotation": True, 
@@ -63,12 +60,11 @@ def main(argv):
             "inverse_problem": "None",
         }
 
-    sol_traj, cmaps = fractal_compress(key, img[None], kwargs) # (# decode steps, 28, 28, 1)
-    n_sources = kwargs["n_sources"]
-    save_path = pathlib.Path(f'artifacts/extra')
-    if not save_path.exists(): save_path.mkdir()
+    sol_traj, _ = fractal_compress(key, img[None], kwargs) 
 
-    np.save(f'{save_path}/{FLAGS.file}_{FLAGS.superres_factor}.npy', sol_traj)
+    save_path = pathlib.Path(f'artifacts')
+    save_path.mkdir(exist_ok=True)
+    np.save(f'artifacts/decoded_traj_{FLAGS.superres_factor}.npy', sol_traj)
 
 
 if __name__ == '__main__':
