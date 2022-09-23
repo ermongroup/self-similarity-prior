@@ -1,5 +1,6 @@
-<p align="center">
 # Self-Similarity Priors: Neural Collages as Differentiable Fractal Representations
+
+<p align="center">
 <img src="https://github.com/DiffEqML/diffeqml-media/blob/main/animations/collage_intro.gif", width="640" >
 </p>
 <div align="center">
