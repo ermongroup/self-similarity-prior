@@ -2,7 +2,7 @@
 <h1 align='center'>Self-Similarity Priors: <br> Neural Collages as Differentiable  Fractal Representations
 </h1>
 <p align="center">
-<video src="media/CollageSteps.mp4">
+<img src="https://github.com/DiffEqML/diffeqml-media/blob/main/animations/collage_intro.gif", width="640" >
 </p>
 <div align="center">
 
@@ -10,6 +10,8 @@
 [![NeurIPS](https://img.shields.io/badge/NeurIPS-2022-red.svg?)]()
 [![License](https://img.shields.io/badge/License-MIT-black.svg?)]()
 [![arXiv](https://img.shields.io/badge/arXiv-2204.07673-purple.svg?)](https://arxiv.org/abs/2204.07673)
+[![Blog](https://img.shields.io/badge/Blog-blue.svg?)](https://zymrael.github.io/self-similarity-prior/)
+[![Gradio](https://img.shields.io/badge/Gradio-Demo-orange.svg?)](https://huggingface.co/spaces/Zymrael/Neural-Collage-Fractalization)
 
 </div>
 
