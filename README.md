@@ -2,7 +2,7 @@
 <h1 align='center'>Self-Similarity Priors: <br> Neural Collages as Differentiable  Fractal Representations
 </h1>
 <p align="center">
-<img src="https://github.com/DiffEqML/diffeqml-media/blob/main/animations/collage_intro.gif", width="640" >
+<video src="media/CollageSteps.mp4">
 </p>
 <div align="center">
 
@@ -36,7 +36,7 @@ The machinery behind collage operators is inspired by fractal compression scheme
 
 ## Codebase
 
-The codebase is organized as follows. We provide a simple implementation of a Collage Operator and related utilities under `torch_src/`. The bulk of the experiments has been carried out in `jax`. Under `scripts/` we provide training and evalaution scripts for the three main experiments. The lossy image compression experiment is performed on a slice of the aerial dataset described in the paper, which can be found at this link:
+The codebase is organized as follows. We provide a simple implementation of a Collage Operator and related utilities under `torch_src/`. The bulk of the experiments has been carried out in `jax`. Under `scripts/` we provide training and evalaution scripts for the three main experiments. The lossy image compression experiment is performed on a slice of the aerial dataset described in the paper, which can be found at this
 [link](https://captain-whu.github.io/DOTA/).
 
 ## Citing this work
