@@ -1,10 +1,11 @@
 
 <h1 align='center'>Self-Similarity Priors: <br> Neural Collages as Differentiable  Fractal Representations
 </h1>
-<p align="center">
-<video src="media/CollageSteps.mp4">
-</p>
+
 <div align="center">
+
+https://user-images.githubusercontent.com/34561392/204065084-e3c80d70-8bbb-4ac4-9449-b64dddb85fcc.mp4
+
 
 [![License](https://img.shields.io/badge/License-MIT-black.svg?)](https://papers.nips.cc/paper/2020/hash/f1686b4badcf28d33ed632036c7ab0b8-Abstract.html)
 [![NeurIPS](https://img.shields.io/badge/NeurIPS-2022-red.svg?)]()
